@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screenshot Comparison Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .sidebar.active {
+            display: block;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            background: #fafafa;
+        }
+
+        .sidebar-header h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .page-list {
+            list-style: none;
+        }
+
+        .page-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .page-item:hover {
+            background: #f8f8f8;
+        }
+
+        .page-item.active {
+            background: #e3f2fd;
+            border-left: 3px solid #2196f3;
+        }
+
+        .page-item-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .page-item-count {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .upload-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 40px;
+        }
+
+        .upload-box {
+            border: 3px dashed #ccc;
+            border-radius: 12px;
+            padding: 60px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .upload-box:hover {
+            border-color: #2196f3;
+            background: #f8f8f8;
+        }
+
+        .upload-box.dragover {
+            border-color: #2196f3;
+            background: #e3f2fd;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .upload-text {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .upload-subtext {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .viewer-area {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .viewer-area.active {
+            display: flex;
+        }
+
+        .toolbar {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 15px 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #f5f5f5;
+        }
+
+        .btn.active {
+            background: #2196f3;
+            color: white;
+            border-color: #2196f3;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 5px;
+        }
+
+        .toolbar-label {
+            font-weight: 500;
+            margin-right: 10px;
+        }
+
+        .image-container {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+            background: #fafafa;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+        }
+
+        .image-wrapper {
+            background: black;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            overflow: auto;
+            position: relative;
+        }
+
+        .image-wrapper img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            cursor: grab;
+            transition: none;
+        }
+
+        .image-wrapper img.dragging {
+            cursor: grabbing;
+        }
+
+        .image-wrapper img.zoomable {
+            max-width: none;
+        }
+
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .zoom-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .zoom-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .zoom-level {
+            font-size: 14px;
+            font-weight: 500;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .zoom-hint {
+            position: absolute;
+            bottom: 80px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .zoom-hint.visible {
+            opacity: 1;
+        }
+
+        .no-selection {
+            text-align: center;
+            color: #999;
+            font-size: 18px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2196f3;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .page-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-right: auto;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+
+        .badge.mobile {
+            background: #4caf50;
+            color: white;
+        }
+
+        .metadata-container {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 20px;
+            display: none;
+        }
+
+        .metadata-container.active {
+            display: block;
+        }
+
+        .metadata-container.hidden {
+            display: none !important;
+        }
+
+        .metadata-panel {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: auto 1fr auto 1fr;
+            gap: 10px 20px;
+            align-items: start;
+        }
+
+        .metadata-label {
+            font-weight: 500;
+            color: #666;
+        }
+
+        .metadata-value {
+            color: #333;
+            word-break: break-all;
+        }
+
+        .metadata-url {
+            color: #2196f3;
+            text-decoration: none;
+        }
+
+        .metadata-url:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <div>Loading ZIP file...</div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Pages</h2>
+                <div id="pageCount" class="page-item-count"></div>
+            </div>
+            <ul class="page-list" id="pageList"></ul>
+        </div>
+
+        <div class="main-content">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-box" id="uploadBox">
+                    <div class="upload-icon">📦</div>
+                    <div class="upload-text">Drop ZIP file here or click to upload</div>
+                    <div class="upload-subtext">Upload your screenshot comparison ZIP file</div>
+                </div>
+                <input type="file" id="fileInput" accept=".zip" />
+            </div>
+
+            <div class="viewer-area" id="viewerArea">
+                <div class="toolbar">
+                    <div class="page-title" id="pageTitle">Select a page</div>
+                    <button class="btn" id="toggleMetadataBtn" title="Toggle metadata panel">ℹ️ Info</button>
+                    <div class="toolbar-label">View:</div>
+                    <div class="btn-group">
+                        <button class="btn active" data-view="compare">Compare</button>
+                        <button class="btn" data-view="before">Before</button>
+                        <button class="btn" data-view="after">After</button>
+                        <button class="btn" data-view="diff">Diff</button>
+                    </div>
+                    <div class="toolbar-label">Device:</div>
+                    <div class="btn-group">
+                        <button class="btn active" data-device="desktop">Desktop</button>
+                        <button class="btn" data-device="mobile">Mobile</button>
+                    </div>
+                    <button class="btn" id="newFileBtn">📂 Load New File</button>
+                </div>
+                <div class="metadata-container" id="metadataContainer">
+                    <div class="metadata-panel" id="metadataPanel"></div>
+                </div>
+                <div class="image-container" id="imageContainer">
+                    <div class="no-selection">Select a page from the sidebar to view screenshots</div>
+                    <div class="zoom-controls" id="zoomControls" style="display: none;">
+                        <button class="zoom-btn" id="zoomOut">−</button>
+                        <div class="zoom-level" id="zoomLevel">100%</div>
+                        <button class="zoom-btn" id="zoomIn">+</button>
+                        <button class="zoom-btn" id="zoomReset" title="Reset">⟲</button>
+                    </div>
+                    <div class="zoom-hint" id="zoomHint">Scroll to zoom • Drag to pan • Double-click to reset</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let zipData = {};
+        let metadataCache = {};
+        let currentPage = null;
+        let currentView = 'compare';
+        let currentDevice = 'desktop';
+
+        const uploadBox = document.getElementById('uploadBox');
+        const uploadArea = document.getElementById('uploadArea');
+        const viewerArea = document.getElementById('viewerArea');
+        const sidebar = document.getElementById('sidebar');
+        const fileInput = document.getElementById('fileInput');
+        const pageList = document.getElementById('pageList');
+        const imageContainer = document.getElementById('imageContainer');
+        const pageTitle = document.getElementById('pageTitle');
+        const loading = document.getElementById('loading');
+        const pageCount = document.getElementById('pageCount');
+        const newFileBtn = document.getElementById('newFileBtn');
+        const metadataContainer = document.getElementById('metadataContainer');
+        const metadataPanel = document.getElementById('metadataPanel');
+        const zoomControls = document.getElementById('zoomControls');
+        const zoomLevel = document.getElementById('zoomLevel');
+        const zoomIn = document.getElementById('zoomIn');
+        const zoomOut = document.getElementById('zoomOut');
+        const zoomReset = document.getElementById('zoomReset');
+        const zoomHint = document.getElementById('zoomHint');
+
+        let currentZoom = 1;
+        let isDragging = false;
+        let startX, startY, scrollLeft, scrollTop;
+        let showMetadata = true;
+
+        const toggleMetadataBtn = document.getElementById('toggleMetadataBtn');
+
+        // Upload box click
+        uploadBox.addEventListener('click', () => fileInput.click());
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        // Drag and drop
+        uploadBox.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadBox.classList.add('dragover');
+        });
+
+        uploadBox.addEventListener('dragleave', () => {
+            uploadBox.classList.remove('dragover');
+        });
+
+        uploadBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadBox.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        // New file button
+        newFileBtn.addEventListener('click', () => {
+            uploadArea.style.display = 'flex';
+            viewerArea.classList.remove('active');
+            sidebar.classList.remove('active');
+            fileInput.value = '';
+            zipData = {};
+            metadataCache = {};
+            currentPage = null;
+        });
+
+        // Toggle metadata button
+        toggleMetadataBtn.addEventListener('click', () => {
+            showMetadata = !showMetadata;
+            if (showMetadata) {
+                metadataContainer.classList.remove('hidden');
+                toggleMetadataBtn.classList.add('active');
+            } else {
+                metadataContainer.classList.add('hidden');
+                toggleMetadataBtn.classList.remove('active');
+            }
+        });
+
+        // View buttons
+        document.querySelectorAll('[data-view]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentView = btn.dataset.view;
+                updateImage();
+            });
+        });
+
+        // Device buttons
+        document.querySelectorAll('[data-device]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('[data-device]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentDevice = btn.dataset.device;
+                updateImage();
+            });
+        });
+
+        // Zoom controls
+        zoomIn.addEventListener('click', () => zoomImage(0.2));
+        zoomOut.addEventListener('click', () => zoomImage(-0.2));
+        zoomReset.addEventListener('click', () => resetZoom());
+
+        function zoomImage(delta) {
+            currentZoom = Math.max(0.5, Math.min(5, currentZoom + delta));
+            applyZoom();
+        }
+
+        function resetZoom() {
+            currentZoom = 1;
+            applyZoom();
+            const img = imageContainer.querySelector('img');
+            if (img) {
+                const wrapper = img.closest('.image-wrapper');
+                if (wrapper) {
+                    wrapper.scrollLeft = 0;
+                    wrapper.scrollTop = 0;
+                }
+            }
+        }
+
+        function applyZoom() {
+            const img = imageContainer.querySelector('img');
+            if (img) {
+                img.style.transform = `scale(${currentZoom})`;
+                img.style.transformOrigin = 'top left';
+                zoomLevel.textContent = `${Math.round(currentZoom * 100)}%`;
+
+                if (currentZoom > 1) {
+                    img.classList.add('zoomable');
+                } else {
+                    img.classList.remove('zoomable');
+                }
+            }
+        }
+
+        function setupImageInteraction(img, wrapper) {
+            // Mouse wheel zoom
+            wrapper.addEventListener('wheel', (e) => {
+                if (e.ctrlKey || e.metaKey) {
+                    e.preventDefault();
+                    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+                    zoomImage(delta);
+                }
+            });
+
+            // Drag to pan
+            wrapper.addEventListener('mousedown', (e) => {
+                if (currentZoom <= 1) return;
+                isDragging = true;
+                img.classList.add('dragging');
+                startX = e.clientX;
+                startY = e.clientY;
+                scrollLeft = wrapper.scrollLeft;
+                scrollTop = wrapper.scrollTop;
+                e.preventDefault();
+            });
+
+            wrapper.addEventListener('mouseleave', () => {
+                isDragging = false;
+                img.classList.remove('dragging');
+            });
+
+            wrapper.addEventListener('mouseup', () => {
+                isDragging = false;
+                img.classList.remove('dragging');
+            });
+
+            wrapper.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                wrapper.scrollLeft = scrollLeft - deltaX;
+                wrapper.scrollTop = scrollTop - deltaY;
+            });
+
+            // Double-click to reset
+            img.addEventListener('dblclick', () => {
+                resetZoom();
+            });
+
+            // Show hint temporarily
+            setTimeout(() => {
+                zoomHint.classList.add('visible');
+                setTimeout(() => {
+                    zoomHint.classList.remove('visible');
+                }, 3000);
+            }, 500);
+        }
+
+        async function handleFile(file) {
+            if (!file.name.endsWith('.zip')) {
+                alert('Please upload a ZIP file');
+                return;
+            }
+
+            loading.classList.add('active');
+
+            try {
+                const zip = await JSZip.loadAsync(file);
+                zipData = {};
+                metadataCache = {};
+
+                // Parse ZIP structure
+                for (const [path, zipEntry] of Object.entries(zip.files)) {
+                    if (zipEntry.dir) continue;
+
+                    const parts = path.split('/');
+                    if (parts.length !== 2) continue;
+
+                    const [folder, filename] = parts;
+
+                    if (!zipData[folder]) {
+                        zipData[folder] = {};
+                    }
+
+                    // Handle metadata files separately
+                    if (filename.endsWith('.json')) {
+                        const text = await zipEntry.async('text');
+                        const metadata = JSON.parse(text);
+                        const metadataKey = filename.startsWith('mobile_') ? 'mobile' : 'desktop';
+                        if (!metadataCache[folder]) {
+                            metadataCache[folder] = {};
+                        }
+                        metadataCache[folder][metadataKey] = metadata;
+                    } else {
+                        const blob = await zipEntry.async('blob');
+                        const url = URL.createObjectURL(blob);
+                        zipData[folder][filename] = url;
+                    }
+                }
+
+                displayPages();
+                uploadArea.style.display = 'none';
+                viewerArea.classList.add('active');
+                sidebar.classList.add('active');
+            } catch (error) {
+                alert('Error loading ZIP file: ' + error.message);
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+
+        function displayPages() {
+            pageList.innerHTML = '';
+            const pages = Object.keys(zipData).sort();
+            pageCount.textContent = `${pages.length} pages found`;
+
+            pages.forEach(page => {
+                const li = document.createElement('li');
+                li.className = 'page-item';
+
+                const files = Object.keys(zipData[page]);
+                const hasMobile = files.some(f => f.startsWith('mobile_'));
+                const hasDesktop = files.some(f => !f.startsWith('mobile_'));
+
+                li.innerHTML = `
+                    <div class="page-item-name">${page}</div>
+                    <div class="page-item-count">
+                        ${hasDesktop ? '<span class="badge">Desktop</span>' : ''}
+                        ${hasMobile ? '<span class="badge mobile">Mobile</span>' : ''}
+                    </div>
+                `;
+
+                li.addEventListener('click', () => selectPage(page));
+                pageList.appendChild(li);
+            });
+        }
+
+        function selectPage(page) {
+            currentPage = page;
+            document.querySelectorAll('.page-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.page-item').classList.add('active');
+            pageTitle.textContent = page;
+            updateImage();
+        }
+
+        function updateImage() {
+            if (!currentPage) return;
+
+            const prefix = currentDevice === 'mobile' ? 'mobile_' : '';
+            const filename = `${prefix}${currentView}.png`;
+            const imageUrl = zipData[currentPage][filename];
+
+            // Display metadata if available
+            const metadata = metadataCache[currentPage]?.[currentDevice];
+            if (metadata) {
+                const diffClass = metadata.DifferencePercentage > 5 ? 'style="color: #f44336; font-weight: 600;"' :
+                    metadata.DifferencePercentage > 1 ? 'style="color: #ff9800; font-weight: 600;"' :
+                    'style="color: #4caf50; font-weight: 600;"';
+
+                metadataPanel.innerHTML = `
+                    <div class="metadata-grid">
+                        <div class="metadata-label">Page:</div>
+                        <div class="metadata-value">${metadata.PageName}</div>
+                        
+                        <div class="metadata-label">Timestamp:</div>
+                        <div class="metadata-value">${new Date(metadata.Timestamp).toLocaleString()}</div>
+                        
+                        <div class="metadata-label">Viewport:</div>
+                        <div class="metadata-value">${metadata.Viewport.Width} × ${metadata.Viewport.Height}</div>
+                        
+                        <div class="metadata-label">Difference:</div>
+                        <div class="metadata-value" ${diffClass}>
+                            ${metadata.DifferencePercentage}% 
+                            <span style="font-size: 11px; color: #666; font-weight: normal;">
+                                (${metadata.DifferentPixels?.toLocaleString() || 0} / ${metadata.TotalPixels?.toLocaleString() || 0} pixels)
+                            </span>
+                        </div>
+
+                        <div class="metadata-label">Before URL:</div>
+                        <div class="metadata-value"><a href="${metadata.BeforeUrl}" target="_blank" class="metadata-url">${metadata.BeforeUrl}</a></div>
+                    
+                        <div class="metadata-label">After URL:</div>
+                        <div class="metadata-value"><a href="${metadata.AfterUrl}" target="_blank" class="metadata-url">${metadata.AfterUrl}</a></div>
+                        
+                        <div class="metadata-label">User Agent:</div>
+                        <div class="metadata-value" style="font-size: 12px;">${metadata.UserAgent}</div>
+                    </div>
+                    ${currentView === 'diff' ? '<div style="margin-top: 15px; padding: 10px; background: #f0f0f0; border-radius: 4px; font-size: 13px;">🟣 Magenta = Changed pixels • Gray = Unchanged • 🔴 Red = Removed • 🟢 Green = Added</div>' : ''}
+                `;
+                metadataContainer.classList.add('active');
+                toggleMetadataBtn.classList.add('active');
+                if (!showMetadata) {
+                    metadataContainer.classList.add('hidden');
+                }
+            } else {
+                metadataContainer.classList.remove('active');
+                toggleMetadataBtn.classList.remove('active');
+            }
+
+            if (imageUrl) {
+                imageContainer.innerHTML = `
+                    <div class="image-wrapper">
+                        <img src="${imageUrl}" alt="${currentPage} - ${currentView}" />
+                    </div>
+                `;
+                zoomControls.style.display = 'flex';
+                currentZoom = 1;
+                zoomLevel.textContent = '100%';
+
+                // Setup interaction after image loads
+                const img = imageContainer.querySelector('img');
+                const wrapper = imageContainer.querySelector('.image-wrapper');
+                if (img && wrapper) {
+                    img.onload = () => setupImageInteraction(img, wrapper);
+                }
+            } else {
+                imageContainer.innerHTML = `
+                    <div class="no-selection">
+                        No ${currentDevice} ${currentView} image available for this page
+                    </div>
+                `;
+                zoomControls.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>
