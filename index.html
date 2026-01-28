@@ -423,8 +423,7 @@
                         <button class="btn active" data-view="compare">Compare</button>
                         <button class="btn" data-view="before">Before</button>
                         <button class="btn" data-view="after">After</button>
-                        <button class="btn" data-view="diff">Diff</button>
-                    </div>
+                        <button class="btn" data-view="diff">Diff</button>                        <button class="btn" data-view="diff-shifted">Diff Shifted</button>                    </div>
                     <div class="toolbar-label">Device:</div>
                     <div class="btn-group">
                         <button class="btn active" data-device="desktop">Desktop</button>
@@ -777,6 +776,7 @@
                         <div class="metadata-value" style="font-size: 12px;">${metadata.UserAgent}</div>
                     </div>
                     ${currentView === 'diff' ? '<div style="margin-top: 15px; padding: 10px; background: #f0f0f0; border-radius: 4px; font-size: 13px;">🟣 Magenta = Changed pixels • Gray = Unchanged • 🔴 Red = Removed • 🟢 Green = Added</div>' : ''}
+                    ${currentView === 'diff-shifted' ? '<div style="margin-top: 15px; padding: 10px; background: #f0f0f0; border-radius: 4px; font-size: 13px;">🔴 Red = Before pixels • 🔵 Blue = After pixels (drawn on top) • White = Unchanged</div>' : ''}
                 `;
                 metadataContainer.classList.add('active');
                 toggleMetadataBtn.classList.add('active');
