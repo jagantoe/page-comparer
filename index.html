@@ -386,6 +386,163 @@
         .metadata-url:hover {
             text-decoration: underline;
         }
+
+        .text-viewer {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .text-viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .text-viewer-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .diff-toggle {
+            padding: 6px 12px;
+            border: 1px solid #2196f3;
+            background: white;
+            color: #2196f3;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .diff-toggle:hover {
+            background: #2196f3;
+            color: white;
+        }
+
+        .diff-side-by-side {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .diff-column {
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            overflow: auto;
+            max-height: calc(100vh - 300px);
+        }
+
+        .diff-column-header {
+            background: #f5f5f5;
+            padding: 8px 12px;
+            font-weight: 600;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .diff-column-header.before {
+            background: #fff5f5;
+            color: #cb2431;
+        }
+
+        .diff-column-header.after {
+            background: #f0fff4;
+            color: #22863a;
+        }
+
+        .diff-merged {
+            width: 100%;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            overflow: auto;
+            max-height: calc(100vh - 300px);
+        }
+
+        .diff-line {
+            padding: 2px 10px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .diff-line.added {
+            background-color: #e6ffed;
+            color: #24292e;
+        }
+
+        .diff-line.removed {
+            background-color: #ffeef0;
+            color: #24292e;
+        }
+
+        .diff-line.unchanged {
+            color: #6a737d;
+        }
+
+        .diff-line::before {
+            display: inline-block;
+            width: 20px;
+            margin-right: 10px;
+            text-align: center;
+        }
+
+        .diff-line.added::before {
+            content: '+';
+            color: #22863a;
+            font-weight: bold;
+        }
+
+        .diff-line.removed::before {
+            content: '-';
+            color: #cb2431;
+            font-weight: bold;
+        }
+
+        .diff-line.unchanged::before {
+            content: ' ';
+        }
+
+        .dom-viewer {
+            background: white;
+            padding: 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            width: 95%;
+            height: calc(100vh - 250px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dom-toolbar {
+            background: #f5f5f5;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 13px;
+            color: #666;
+            flex-shrink: 0;
+        }
+
+        .dom-viewer iframe {
+            border: none;
+            width: 100%;
+            flex: 1;
+            background: white;
+            min-height: 0;
+        }
     </style>
 </head>
 
@@ -423,7 +580,12 @@
                         <button class="btn active" data-view="compare">Compare</button>
                         <button class="btn" data-view="before">Before</button>
                         <button class="btn" data-view="after">After</button>
-                        <button class="btn" data-view="diff">Diff</button>                        <button class="btn" data-view="diff-shifted">Diff Shifted</button>                    </div>
+                        <button class="btn" data-view="diff">Diff</button>
+                        <button class="btn" data-view="diff-shifted">Diff Shifted</button>
+                        <button class="btn" data-view="aria-diff">Aria Diff</button>
+                        <button class="btn" data-view="dom-before">DOM Before</button>
+                        <button class="btn" data-view="dom-after">DOM After</button>
+                    </div>
                     <div class="toolbar-label">Device:</div>
                     <div class="btn-group">
                         <button class="btn active" data-device="desktop">Desktop</button>
@@ -549,6 +711,7 @@
                 document.querySelectorAll('[data-device]').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentDevice = btn.dataset.device;
+                updateButtonVisibility();
                 updateImage();
             });
         });
@@ -681,6 +844,10 @@
                             metadataCache[folder] = {};
                         }
                         metadataCache[folder][metadataKey] = metadata;
+                    } else if (filename.endsWith('.txt') || filename.endsWith('.html')) {
+                        // Load text files (aria snapshots and DOM snapshots) as text
+                        const text = await zipEntry.async('text');
+                        zipData[folder][filename] = text;
                     } else {
                         const blob = await zipEntry.async('blob');
                         const url = URL.createObjectURL(blob);
@@ -723,6 +890,18 @@
                 li.addEventListener('click', () => selectPage(page));
                 pageList.appendChild(li);
             });
+
+            // Auto-select first page if available
+            if (pages.length > 0) {
+                const firstPageItem = pageList.querySelector('.page-item');
+                if (firstPageItem) {
+                    firstPageItem.classList.add('active');
+                    currentPage = pages[0];
+                    pageTitle.textContent = pages[0];
+                    updateButtonVisibility();
+                    updateImage();
+                }
+            }
         }
 
         function selectPage(page) {
@@ -730,13 +909,290 @@
             document.querySelectorAll('.page-item').forEach(item => item.classList.remove('active'));
             event.target.closest('.page-item').classList.add('active');
             pageTitle.textContent = page;
+            updateButtonVisibility();
             updateImage();
+        }
+
+        function updateButtonVisibility() {
+            if (!currentPage) return;
+
+            const prefix = currentDevice === 'mobile' ? 'mobile_' : '';
+            const files = zipData[currentPage] || {};
+
+            // Check availability of each view type
+            const hasAriaDiff = files[`${prefix}before-aria.txt`] && files[`${prefix}after-aria.txt`];
+            const hasDomBefore = files[`${prefix}before-dom.html`];
+            const hasDomAfter = files[`${prefix}after-dom.html`];
+            const hasCompare = files[`${prefix}compare.png`];
+            const hasBefore = files[`${prefix}before.png`];
+            const hasAfter = files[`${prefix}after.png`];
+            const hasDiff = files[`${prefix}diff.png`];
+            const hasDiffShifted = files[`${prefix}diff-shifted.png`];
+
+            // Update button visibility and collect available views
+            const viewButtons = document.querySelectorAll('[data-view]');
+            const availableViews = [];
+            
+            viewButtons.forEach(btn => {
+                const view = btn.dataset.view;
+                let isAvailable = false;
+
+                switch(view) {
+                    case 'aria-diff': isAvailable = hasAriaDiff; break;
+                    case 'dom-before': isAvailable = hasDomBefore; break;
+                    case 'dom-after': isAvailable = hasDomAfter; break;
+                    case 'compare': isAvailable = hasCompare; break;
+                    case 'before': isAvailable = hasBefore; break;
+                    case 'after': isAvailable = hasAfter; break;
+                    case 'diff': isAvailable = hasDiff; break;
+                    case 'diff-shifted': isAvailable = hasDiffShifted; break;
+                }
+
+                if (isAvailable) {
+                    btn.style.display = '';
+                    availableViews.push(view);
+                } else {
+                    btn.style.display = 'none';
+                }
+            });
+
+            // If current view is not available, switch to first available view
+            if (!availableViews.includes(currentView) && availableViews.length > 0) {
+                currentView = availableViews[0];
+                viewButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.view === currentView);
+                });
+            }
+        }
+
+        function toggleAriaDiffView() {
+            const mergedView = document.querySelector('.diff-merged');
+            const sideBySideView = document.querySelector('.diff-side-by-side');
+            const toggleBtn = document.querySelector('.diff-toggle');
+
+            if (mergedView && sideBySideView && toggleBtn) {
+                if (mergedView.style.display === 'none') {
+                    // Switch to merged
+                    mergedView.style.display = 'block';
+                    sideBySideView.style.display = 'none';
+                    toggleBtn.textContent = 'Switch to Side-by-Side';
+                } else {
+                    // Switch to side-by-side
+                    mergedView.style.display = 'none';
+                    sideBySideView.style.display = 'block';
+                    toggleBtn.textContent = 'Switch to Merged';
+                }
+            }
+        }
+
+        function computeTextDiff(beforeText, afterText) {
+            const beforeLines = beforeText.split('\n');
+            const afterLines = afterText.split('\n');
+            const result = [];
+
+            // Simple line-by-line diff
+            const maxLines = Math.max(beforeLines.length, afterLines.length);
+            let beforeIdx = 0;
+            let afterIdx = 0;
+
+            while (beforeIdx < beforeLines.length || afterIdx < afterLines.length) {
+                const beforeLine = beforeIdx < beforeLines.length ? beforeLines[beforeIdx] : null;
+                const afterLine = afterIdx < afterLines.length ? afterLines[afterIdx] : null;
+
+                if (beforeLine === afterLine) {
+                    result.push({
+                        type: 'unchanged',
+                        text: beforeLine
+                    });
+                    beforeIdx++;
+                    afterIdx++;
+                } else if (beforeLine !== null && afterLine === null) {
+                    result.push({
+                        type: 'removed',
+                        text: beforeLine
+                    });
+                    beforeIdx++;
+                } else if (beforeLine === null && afterLine !== null) {
+                    result.push({
+                        type: 'added',
+                        text: afterLine
+                    });
+                    afterIdx++;
+                } else {
+                    // Look ahead to see if this is a change or insertion/deletion
+                    const beforeInAfter = afterLines.slice(afterIdx).indexOf(beforeLine);
+                    const afterInBefore = beforeLines.slice(beforeIdx).indexOf(afterLine);
+
+                    if (beforeInAfter !== -1 && (afterInBefore === -1 || beforeInAfter < afterInBefore)) {
+                        // Lines were added
+                        result.push({
+                            type: 'added',
+                            text: afterLine
+                        });
+                        afterIdx++;
+                    } else if (afterInBefore !== -1) {
+                        // Lines were removed
+                        result.push({
+                            type: 'removed',
+                            text: beforeLine
+                        });
+                        beforeIdx++;
+                    } else {
+                        // Lines are different
+                        result.push({
+                            type: 'removed',
+                            text: beforeLine
+                        });
+                        result.push({
+                            type: 'added',
+                            text: afterLine
+                        });
+                        beforeIdx++;
+                        afterIdx++;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         function updateImage() {
             if (!currentPage) return;
 
             const prefix = currentDevice === 'mobile' ? 'mobile_' : '';
+
+            // Handle aria diff view
+            if (currentView === 'aria-diff') {
+                const beforeAriaFile = `${prefix}before-aria.txt`;
+                const afterAriaFile = `${prefix}after-aria.txt`;
+                const beforeAria = zipData[currentPage][beforeAriaFile];
+                const afterAria = zipData[currentPage][afterAriaFile];
+
+                if (beforeAria && afterAria) {
+                    const diff = computeTextDiff(beforeAria, afterAria);
+
+                    // Generate merged view
+                    const mergedHtml = diff.map(line => {
+                        return `<div class="diff-line ${line.type}">${escapeHtml(line.text || '')}</div>`;
+                    }).join('');
+
+                    // Generate side-by-side view
+                    const beforeLines = diff.filter(l => l.type === 'unchanged' || l.type === 'removed')
+                        .map(line => `<div class="diff-line ${line.type}">${escapeHtml(line.text || '')}</div>`).join(
+                            '');
+                    const afterLines = diff.filter(l => l.type === 'unchanged' || l.type === 'added')
+                        .map(line => `<div class="diff-line ${line.type}">${escapeHtml(line.text || '')}</div>`).join(
+                            '');
+
+                    const sideBySideHtml = `
+                        <div class="diff-side-by-side">
+                            <div class="diff-column">
+                                <div class="diff-column-header before">Before (Removed)</div>
+                                ${beforeLines}
+                            </div>
+                            <div class="diff-column">
+                                <div class="diff-column-header after">After (Added)</div>
+                                ${afterLines}
+                            </div>
+                        </div>
+                    `;
+
+                    imageContainer.innerHTML = `
+                        <div class="text-viewer">
+                            <div class="text-viewer-header">
+                                <h3>Aria Snapshot Diff</h3>
+                                <button class="diff-toggle" onclick="toggleAriaDiffView()">Switch to Side-by-Side</button>
+                            </div>
+                            <div class="diff-merged">${mergedHtml}</div>
+                            <div class="diff-side-by-side" style="display: none;">${sideBySideHtml}</div>
+                        </div>
+                    `;
+                    zoomControls.style.display = 'none';
+                    metadataContainer.classList.remove('active');
+                    return;
+                } else {
+                    imageContainer.innerHTML = `
+                        <div class="no-selection">
+                            No aria snapshot files available for this page
+                        </div>
+                    `;
+                    zoomControls.style.display = 'none';
+                    metadataContainer.classList.remove('active');
+                    return;
+                }
+            }
+
+            // Handle DOM before view
+            if (currentView === 'dom-before') {
+                const domFile = `${prefix}before-dom.html`;
+                const domHtml = zipData[currentPage][domFile];
+
+                if (domHtml) {
+                    const viewer = document.createElement('div');
+                    viewer.className = 'dom-viewer';
+                    viewer.innerHTML = `
+                        <div class="dom-toolbar">DOM Snapshot (Before) - Rendered in sandboxed iframe</div>
+                    `;
+                    const iframe = document.createElement('iframe');
+                    iframe.setAttribute('sandbox', 'allow-same-origin');
+                    iframe.srcdoc = domHtml;
+                    viewer.appendChild(iframe);
+                    imageContainer.innerHTML = '';
+                    imageContainer.appendChild(viewer);
+                    zoomControls.style.display = 'none';
+                    metadataContainer.classList.remove('active');
+                    return;
+                } else {
+                    imageContainer.innerHTML = `
+                        <div class="no-selection">
+                            No DOM snapshot available for this page
+                        </div>
+                    `;
+                    zoomControls.style.display = 'none';
+                    metadataContainer.classList.remove('active');
+                    return;
+                }
+            }
+
+            // Handle DOM after view
+            if (currentView === 'dom-after') {
+                const domFile = `${prefix}after-dom.html`;
+                const domHtml = zipData[currentPage][domFile];
+
+                if (domHtml) {
+                    const viewer = document.createElement('div');
+                    viewer.className = 'dom-viewer';
+                    viewer.innerHTML = `
+                        <div class="dom-toolbar">DOM Snapshot (After) - Rendered in sandboxed iframe</div>
+                    `;
+                    const iframe = document.createElement('iframe');
+                    iframe.setAttribute('sandbox', 'allow-same-origin');
+                    iframe.srcdoc = domHtml;
+                    viewer.appendChild(iframe);
+                    imageContainer.innerHTML = '';
+                    imageContainer.appendChild(viewer);
+                    zoomControls.style.display = 'none';
+                    metadataContainer.classList.remove('active');
+                    return;
+                } else {
+                    imageContainer.innerHTML = `
+                        <div class="no-selection">
+                            No DOM snapshot available for this page
+                        </div>
+                    `;
+                    zoomControls.style.display = 'none';
+                    metadataContainer.classList.remove('active');
+                    return;
+                }
+            }
+
+            // Handle image views (original functionality)
             const filename = `${prefix}${currentView}.png`;
             const imageUrl = zipData[currentPage][filename];
 
