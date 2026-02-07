@@ -48,6 +48,379 @@
             margin-bottom: 10px;
         }
 
+        .sidebar-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .sidebar-btn {
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .sidebar-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .sidebar-btn.primary {
+            background: #2196f3;
+            color: white;
+            border-color: #2196f3;
+        }
+
+        .sidebar-btn.primary:hover {
+            background: #1976d2;
+        }
+
+        .search-box {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 30px 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #2196f3;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: none;
+        }
+
+        .search-clear.visible {
+            display: block;
+        }
+
+        .search-clear:hover {
+            color: #333;
+        }
+
+        .filter-toggle {
+            margin-top: 8px;
+            padding: 8px 0;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .toggle-label:hover {
+            color: #333;
+        }
+
+        .toggle-label input[type="checkbox"] {
+            margin: 0 8px 0 0;
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            accent-color: #2196f3;
+        }
+
+        .toggle-label span {
+            font-size: 13px;
+        }
+
+        .no-results {
+            padding: 20px;
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .annotation-toolbar {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            display: none;
+            gap: 8px;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .annotation-toolbar.active {
+            display: flex;
+        }
+
+        .annotation-btn {
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .annotation-btn:hover {
+            background: #e8e8e8;
+        }
+
+        .annotation-btn.active {
+            background: #2196f3;
+            color: white;
+            border-color: #2196f3;
+        }
+
+        .annotation-color-picker {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .annotation-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .annotation-canvas.drawing {
+            pointer-events: all;
+            cursor: crosshair;
+        }
+
+        .annotation-shape {
+            position: absolute;
+            border: 2px solid;
+            box-sizing: border-box;
+            pointer-events: all;
+            cursor: pointer;
+        }
+
+        .annotation-shape.selected {
+            border-width: 3px;
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
+        }
+
+        .annotation-shape:hover {
+            opacity: 0.8;
+        }
+
+        .annotation-number {
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            width: 24px;
+            height: 24px;
+            background: inherit;
+            border: 2px solid;
+            border-color: inherit;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .annotation-delete {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 20px;
+            height: 20px;
+            background: #f44336;
+            border: 2px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .annotation-shape:hover .annotation-delete {
+            opacity: 1;
+        }
+
+        .annotation-delete:hover {
+            background: #d32f2f;
+            transform: scale(1.1);
+        }
+
+        .annotation-delete {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 20px;
+            height: 20px;
+            background: #f44336;
+            border: 2px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .annotation-shape:hover .annotation-delete {
+            opacity: 1;
+        }
+
+        .annotation-delete:hover {
+            background: #d32f2f;
+            transform: scale(1.1);
+        }
+
+        .annotation-handles {
+            display: none;
+        }
+
+        .annotation-shape.selected .annotation-handles {
+            display: block;
+        }
+
+        .annotation-handle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border: 2px solid #2196f3;
+            border-radius: 50%;
+            cursor: move;
+        }
+
+        .annotation-handle.nw {
+            top: -4px;
+            left: -4px;
+            cursor: nw-resize;
+        }
+
+        .annotation-handle.ne {
+            top: -4px;
+            right: -4px;
+            cursor: ne-resize;
+        }
+
+        .annotation-handle.sw {
+            bottom: -4px;
+            left: -4px;
+            cursor: sw-resize;
+        }
+
+        .annotation-handle.se {
+            bottom: -4px;
+            right: -4px;
+            cursor: se-resize;
+        }
+
+        .comment-item.with-annotation {
+            border-left: 3px solid;
+            padding-left: 17px;
+        }
+
+        .comment-annotation-badge {
+            display: inline-block;
+            background: rgba(33, 150, 243, 0.1);
+            color: #2196f3;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        .comment-annotation-badge:hover {
+            background: rgba(33, 150, 243, 0.2);
+        }
+
+        .comment-actions {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .comment-action-btn {
+            padding: 4px 8px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            color: #666;
+            flex: 1;
+        }
+
+        .comment-action-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .comment-delete-btn {
+            padding: 4px 8px;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: background 0.2s;
+        }
+
+        .comment-delete-btn:hover {
+            background: #d32f2f;
+        }
+
         .page-list {
             list-style: none;
         }
@@ -71,17 +444,56 @@
         .page-item-name {
             font-weight: 500;
             margin-bottom: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .page-item-count {
             font-size: 12px;
             color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .comment-indicator {
+            display: inline-flex;
+            align-items: center;
+            background: #2196f3;
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .comment-indicator::before {
+            content: '💬';
+            margin-right: 3px;
         }
 
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+        }
+
+        .viewer-area {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .viewer-area.active {
+            display: flex;
+        }
+
+        .viewer-content {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
             overflow: hidden;
         }
 
@@ -92,6 +504,13 @@
             justify-content: center;
             height: 100%;
             padding: 40px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #f5f5f5;
+            z-index: 10;
         }
 
         .upload-box {
@@ -129,14 +548,11 @@
             font-size: 14px;
         }
 
-        .viewer-area {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .viewer-area.active {
+        .image-container-wrapper {
+            flex: 1;
             display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .toolbar {
@@ -146,6 +562,13 @@
             display: flex;
             gap: 10px;
             align-items: center;
+        }
+
+        .toolbar-separator {
+            width: 1px;
+            height: 32px;
+            background: #e0e0e0;
+            margin: 0 5px;
         }
 
         .btn {
@@ -176,6 +599,21 @@
         .toolbar-label {
             font-weight: 500;
             margin-right: 10px;
+        }
+
+        .viewer-content {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+        }
+
+        .image-container-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
         }
 
         .image-container {
@@ -534,6 +972,9 @@
             font-size: 13px;
             color: #666;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .dom-viewer iframe {
@@ -542,6 +983,292 @@
             flex: 1;
             background: white;
             min-height: 0;
+        }
+
+        .comments-panel {
+            width: 0;
+            background: white;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+            transition: width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .comments-panel.open {
+            width: 400px;
+        }
+
+        .comments-header {
+            padding: 20px;
+            background: #2196f3;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .comments-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .close-comments {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .comments-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .comment-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border-left: 3px solid #2196f3;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #2196f3;
+        }
+
+        .comment-time {
+            color: #999;
+        }
+
+        .comment-text {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .comment-input-section {
+            padding: 15px;
+            border-top: 1px solid #e0e0e0;
+            background: #fafafa;
+            flex-shrink: 0;
+        }
+
+        .comment-input {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: #2196f3;
+        }
+
+        .comment-submit {
+            width: 100%;
+            padding: 10px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .comment-submit:hover {
+            background: #1976d2;
+        }
+
+        .comment-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .comments-toggle {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 60px;
+            height: 60px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            transition: all 0.2s;
+        }
+
+        .comments-toggle.visible {
+            display: flex;
+        }
+
+        .comments-toggle.hidden {
+            display: none !important;
+        }
+
+        .comments-toggle:hover {
+            background: #1976d2;
+            transform: scale(1.1);
+        }
+
+        .comments-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #f44336;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+
+        .modal p {
+            margin: 0 0 20px 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .modal input:focus {
+            outline: none;
+            border-color: #2196f3;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .modal-btn.primary {
+            background: #2196f3;
+            color: white;
+        }
+
+        .modal-btn.primary:hover {
+            background: #1976d2;
+        }
+
+        .no-comments {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-size: 14px;
+        }
+
+        .shortcuts-modal {
+            max-width: 500px;
+        }
+
+        .shortcuts-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 15px 20px;
+            margin-top: 20px;
+        }
+
+        .shortcut-key {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 4px 12px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .shortcut-desc {
+            color: #666;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
         }
     </style>
 </head>
@@ -555,9 +1282,26 @@
     <div class="container">
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <h2>Pages</h2>
+                <div class="sidebar-header-top">
+                    <h2>Pages</h2>
+                    <div class="sidebar-actions">
+                        <button class="sidebar-btn" id="newFileBtn" title="Load a new ZIP file">📂</button>
+                        <button class="sidebar-btn primary" id="exportZipBtn" style="display: none;" title="Export ZIP with comments">💾</button>
+                    </div>
+                </div>
                 <div id="pageCount" class="page-item-count"></div>
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search pages..." />
+                    <button class="search-clear" id="searchClear">×</button>
+                </div>
+                <div class="filter-toggle">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="showOnlyWithComments" />
+                        <span>Only pages with comments</span>
+                    </label>
+                </div>
             </div>
+            <div class="no-results" id="noResults" style="display: none;">No pages found</div>
             <ul class="page-list" id="pageList"></ul>
         </div>
 
@@ -575,6 +1319,8 @@
                 <div class="toolbar">
                     <div class="page-title" id="pageTitle">Select a page</div>
                     <button class="btn" id="toggleMetadataBtn" title="Toggle metadata panel">ℹ️ Info</button>
+                    <button class="btn" id="helpBtn" title="Keyboard shortcuts">❓ Help</button>
+                    <div class="toolbar-separator"></div>
                     <div class="toolbar-label">View:</div>
                     <div class="btn-group">
                         <button class="btn active" data-view="compare">Compare</button>
@@ -586,26 +1332,91 @@
                         <button class="btn" data-view="dom-before">DOM Before</button>
                         <button class="btn" data-view="dom-after">DOM After</button>
                     </div>
+                    <div class="toolbar-separator"></div>
                     <div class="toolbar-label">Device:</div>
                     <div class="btn-group">
                         <button class="btn active" data-device="desktop">Desktop</button>
                         <button class="btn" data-device="mobile">Mobile</button>
                     </div>
-                    <button class="btn" id="newFileBtn">📂 Load New File</button>
                 </div>
-                <div class="metadata-container" id="metadataContainer">
-                    <div class="metadata-panel" id="metadataPanel"></div>
-                </div>
-                <div class="image-container" id="imageContainer">
-                    <div class="no-selection">Select a page from the sidebar to view screenshots</div>
-                    <div class="zoom-controls" id="zoomControls" style="display: none;">
-                        <button class="zoom-btn" id="zoomOut">−</button>
-                        <div class="zoom-level" id="zoomLevel">100%</div>
-                        <button class="zoom-btn" id="zoomIn">+</button>
-                        <button class="zoom-btn" id="zoomReset" title="Reset">⟲</button>
+
+                <div class="viewer-content">
+                    <div class="image-container-wrapper">
+                        <div class="metadata-container" id="metadataContainer">
+                            <div class="metadata-panel" id="metadataPanel"></div>
+                        </div>
+                        <div class="image-container" id="imageContainer">
+                            <div class="no-selection">Select a page from the sidebar to view screenshots</div>
+                            <div class="zoom-controls" id="zoomControls" style="display: none;">
+                                <button class="zoom-btn" id="zoomOut">−</button>
+                                <div class="zoom-level" id="zoomLevel">100%</div>
+                                <button class="zoom-btn" id="zoomIn">+</button>
+                                <button class="zoom-btn" id="zoomReset" title="Reset">⟲</button>
+                            </div>
+                            <div class="zoom-hint" id="zoomHint">Scroll to zoom • Drag to pan • Double-click to reset
+                            </div>
+                        </div>
                     </div>
-                    <div class="zoom-hint" id="zoomHint">Scroll to zoom • Drag to pan • Double-click to reset</div>
+
+                    <div class="comments-panel" id="commentsPanel">
+                        <div class="comments-header">
+                            <h3>Comments</h3>
+                            <button class="close-comments" id="closeComments">×</button>
+                        </div>
+                        <div class="comments-list" id="commentsList">
+                            <div class="no-comments">No comments yet. Be the first to comment!</div>
+                        </div>
+                        <div class="comment-input-section">
+                            <textarea class="comment-input" id="commentInput"
+                                placeholder="Write a comment..."></textarea>
+                            <button class="comment-submit" id="commentSubmit">Add Comment</button>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="comments-toggle" id="commentsToggle" title="Comments">
+        💬
+        <span class="comments-badge" id="commentsBadge" style="display: none;">0</span>
+    </button>
+
+    <div class="modal-overlay" id="usernameModal">
+        <div class="modal">
+            <h3>Welcome!</h3>
+            <p>Please enter your name to start commenting:</p>
+            <input type="text" id="usernameInput" placeholder="Your name" maxlength="50" />
+            <div class="modal-buttons">
+                <button class="modal-btn primary" id="usernameSubmit">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="helpModal">
+        <div class="modal shortcuts-modal">
+            <h3>Keyboard Shortcuts</h3>
+            <div class="shortcuts-grid">
+                <div class="shortcut-key">↑ / ↓</div>
+                <div class="shortcut-desc">Navigate between pages</div>
+
+                <div class="shortcut-key">C</div>
+                <div class="shortcut-desc">Toggle comments panel</div>
+
+                <div class="shortcut-key">D</div>
+                <div class="shortcut-desc">Switch to Desktop view</div>
+
+                <div class="shortcut-key">M</div>
+                <div class="shortcut-desc">Switch to Mobile view</div>
+
+                <div class="shortcut-key">ESC</div>
+                <div class="shortcut-desc">Clear search / Close modals</div>
+
+                <div class="shortcut-key">?</div>
+                <div class="shortcut-desc">Show this help dialog</div>
+            </div>
+            <div class="modal-buttons" style="margin-top: 20px;">
+                <button class="modal-btn primary" id="closeHelpBtn">Close</button>
             </div>
         </div>
     </div>
@@ -613,9 +1424,12 @@
     <script>
         let zipData = {};
         let metadataCache = {};
+        let commentsData = {}; // Store comments per page
+        let currentUsername = localStorage.getItem('commentsUsername') || null;
         let currentPage = null;
         let currentView = 'compare';
         let currentDevice = 'desktop';
+        let originalZipFile = null; // Store original ZIP file for export
 
         const uploadBox = document.getElementById('uploadBox');
         const uploadArea = document.getElementById('uploadArea');
@@ -636,11 +1450,37 @@
         const zoomOut = document.getElementById('zoomOut');
         const zoomReset = document.getElementById('zoomReset');
         const zoomHint = document.getElementById('zoomHint');
+        const commentsToggle = document.getElementById('commentsToggle');
+        const commentsPanel = document.getElementById('commentsPanel');
+        const closeComments = document.getElementById('closeComments');
+        const commentsList = document.getElementById('commentsList');
+        const commentInput = document.getElementById('commentInput');
+        const commentSubmit = document.getElementById('commentSubmit');
+        const commentsBadge = document.getElementById('commentsBadge');
+        const usernameModal = document.getElementById('usernameModal');
+        const usernameInput = document.getElementById('usernameInput');
+        const usernameSubmit = document.getElementById('usernameSubmit');
+        const exportZipBtn = document.getElementById('exportZipBtn');
+        const helpBtn = document.getElementById('helpBtn');
+        const helpModal = document.getElementById('helpModal');
+        const closeHelpBtn = document.getElementById('closeHelpBtn');
+        const searchInput = document.getElementById('searchInput');
+        const searchClear = document.getElementById('searchClear');
+        const noResults = document.getElementById('noResults');
+        const showOnlyWithComments = document.getElementById('showOnlyWithComments');
 
         let currentZoom = 1;
         let isDragging = false;
         let startX, startY, scrollLeft, scrollTop;
         let showMetadata = true;
+        let isDrawingAnnotation = false;
+        let annotationStartX, annotationStartY;
+        let selectedAnnotation = null;
+        let annotationIdCounter = 0;
+        let pendingCommentForAnnotation = null; // Track which comment to add annotation to
+        const annotationColor = '#2196f3'; // Default blue color
+        let showOnlyPagesWithComments = false; // Filter toggle state
+        let annotationResizeObserver = null; // Track ResizeObserver for cleanup
 
         const toggleMetadataBtn = document.getElementById('toggleMetadataBtn');
 
@@ -674,13 +1514,40 @@
 
         // New file button
         newFileBtn.addEventListener('click', () => {
+            // Check if there are any unsaved comments
+            const hasComments = Object.keys(commentsData).some(page => 
+                commentsData[page] && commentsData[page].length > 0
+            );
+            
+            if (hasComments) {
+                const confirmed = confirm(
+                    'You have comments in the current session. ' +
+                    'Make sure to export the ZIP with comments before loading a new file, ' +
+                    'otherwise your comments will be lost.\n\n' +
+                    'Do you want to continue and load a new file?'
+                );
+                
+                if (!confirmed) {
+                    return; // Cancel loading new file
+                }
+            }
+            
             uploadArea.style.display = 'flex';
             viewerArea.classList.remove('active');
             sidebar.classList.remove('active');
+            commentsToggle.classList.remove('visible');
+            exportZipBtn.style.display = 'none';
             fileInput.value = '';
             zipData = {};
             metadataCache = {};
+            commentsData = {};
+            originalZipFile = null;
             currentPage = null;
+        });
+
+        // Export ZIP with comments
+        exportZipBtn.addEventListener('click', async () => {
+            await exportZipWithComments();
         });
 
         // Toggle metadata button
@@ -721,6 +1588,460 @@
         zoomOut.addEventListener('click', () => zoomImage(-0.2));
         zoomReset.addEventListener('click', () => resetZoom());
 
+        // Comments functionality
+        commentsToggle.addEventListener('click', () => {
+            openCommentsPanel();
+        });
+
+        closeComments.addEventListener('click', () => {
+            closeCommentsPanel();
+        });
+
+        commentSubmit.addEventListener('click', () => {
+            addComment();
+        });
+
+        commentInput.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                addComment();
+            }
+        });
+
+        usernameSubmit.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            if (username) {
+                currentUsername = username;
+                localStorage.setItem('commentsUsername', username);
+                usernameModal.classList.remove('active');
+            }
+        });
+
+        usernameInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                usernameSubmit.click();
+            }
+        });
+
+        // Help modal
+        helpBtn.addEventListener('click', () => {
+            helpModal.classList.add('active');
+        });
+
+        closeHelpBtn.addEventListener('click', () => {
+            helpModal.classList.remove('active');
+        });
+
+        helpModal.addEventListener('click', (e) => {
+            if (e.target === helpModal) {
+                helpModal.classList.remove('active');
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger shortcuts when typing in inputs
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                // Allow Escape to clear search
+                if (e.key === 'Escape' && e.target === searchInput) {
+                    searchInput.value = '';
+                    filterPages();
+                }
+                return;
+            }
+
+            // Don't trigger if modals are open (except help modal for ?)
+            if (usernameModal.classList.contains('active')) {
+                return;
+            }
+
+            const key = e.key.toLowerCase();
+
+            // Arrow keys - navigate pages
+            if (key === 'arrowup' || key === 'arrowdown') {
+                e.preventDefault();
+                const pages = Object.keys(zipData).sort();
+                if (pages.length === 0 || !currentPage) return;
+
+                const currentIndex = pages.indexOf(currentPage);
+                let newIndex;
+
+                if (key === 'arrowup') {
+                    newIndex = currentIndex > 0 ? currentIndex - 1 : pages.length - 1;
+                } else {
+                    newIndex = currentIndex < pages.length - 1 ? currentIndex + 1 : 0;
+                }
+
+                const newPage = pages[newIndex];
+                const pageItems = document.querySelectorAll('.page-item');
+                pageItems.forEach(item => {
+                    if (item.dataset.page === newPage) {
+                        item.click();
+                        item.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest'
+                        });
+                    }
+                });
+            }
+
+            // C - toggle comments
+            if (key === 'c') {
+                e.preventDefault();
+                if (commentsPanel.classList.contains('open')) {
+                    closeCommentsPanel();
+                } else if (commentsToggle.classList.contains('visible')) {
+                    openCommentsPanel();
+                }
+            }
+
+            // D - desktop view
+            if (key === 'd') {
+                e.preventDefault();
+                const desktopBtn = document.querySelector('[data-device="desktop"]');
+                if (desktopBtn && !desktopBtn.classList.contains('active')) {
+                    desktopBtn.click();
+                }
+            }
+
+            // M - mobile view
+            if (key === 'm') {
+                e.preventDefault();
+                const mobileBtn = document.querySelector('[data-device="mobile"]');
+                if (mobileBtn && !mobileBtn.classList.contains('active')) {
+                    mobileBtn.click();
+                }
+            }
+
+            // ? - show help
+            if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+                e.preventDefault();
+                helpModal.classList.add('active');
+            }
+
+            // Escape - close help modal
+            if (e.key === 'Escape' && helpModal.classList.contains('active')) {
+                helpModal.classList.remove('active');
+            }
+        });
+
+        // Search functionality
+        searchInput.addEventListener('input', filterPages);
+        searchClear.addEventListener('click', () => {
+            searchInput.value = '';
+            filterPages();
+            searchInput.focus();
+        });
+
+        // Filter toggle for showing only pages with comments
+        showOnlyWithComments.addEventListener('change', (e) => {
+            showOnlyPagesWithComments = e.target.checked;
+            filterPages();
+        });
+
+        // Window resize listener as fallback for annotation alignment
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                renderAnnotations();
+            }, 100);
+        });
+
+        // Reusable functions for opening/closing comments panel
+        function openCommentsPanel() {
+            commentsPanel.classList.add('open');
+            commentsToggle.classList.add('hidden');
+            loadCommentsForPage();
+        }
+
+        function closeCommentsPanel() {
+            commentsPanel.classList.remove('open');
+            commentsToggle.classList.remove('hidden');
+        }
+
+        function createAnnotationCanvas(imgWrapper) {
+            // Remove existing canvas and disconnect observer
+            const existingCanvas = imgWrapper.querySelector('.annotation-canvas');
+            if (existingCanvas) {
+                existingCanvas.remove();
+            }
+            if (annotationResizeObserver) {
+                annotationResizeObserver.disconnect();
+                annotationResizeObserver = null;
+            }
+
+            const canvas = document.createElement('div');
+            canvas.className = 'annotation-canvas';
+
+            // Drawing events
+            canvas.addEventListener('mousedown', startDrawingAnnotation);
+            canvas.addEventListener('mousemove', continueDrawingAnnotation);
+            canvas.addEventListener('mouseup', finishDrawingAnnotation);
+
+            imgWrapper.appendChild(canvas);
+
+            // Set up ResizeObserver to track image size changes
+            const img = imgWrapper.querySelector('img');
+            if (img && window.ResizeObserver) {
+                annotationResizeObserver = new ResizeObserver(() => {
+                    renderAnnotations();
+                });
+                annotationResizeObserver.observe(img);
+            }
+
+            // Also listen to scroll events on wrapper for when zoomed and panning
+            imgWrapper.addEventListener('scroll', () => {
+                requestAnimationFrame(() => renderAnnotations());
+            }, {
+                passive: true
+            });
+
+            // Render existing annotations
+            renderAnnotations();
+        }
+
+        function startDrawingAnnotation(e) {
+            if (!currentPage) return;
+            // Don't start drawing if clicking on an existing annotation
+            if (e.target.classList.contains('annotation-shape') || e.target.classList.contains('annotation-number'))
+                return;
+
+            isDrawingAnnotation = true;
+            const rect = e.currentTarget.getBoundingClientRect();
+            annotationStartX = (e.clientX - rect.left) / rect.width;
+            annotationStartY = (e.clientY - rect.top) / rect.height;
+        }
+
+        function continueDrawingAnnotation(e) {
+            if (!isDrawingAnnotation) return;
+
+            const canvas = e.currentTarget;
+            const rect = canvas.getBoundingClientRect();
+            const currentX = (e.clientX - rect.left) / rect.width;
+            const currentY = (e.clientY - rect.top) / rect.height;
+
+            // Remove preview
+            const preview = canvas.querySelector('.annotation-preview');
+            if (preview) preview.remove();
+
+            // Create preview shape
+            const shape = document.createElement('div');
+            shape.className = 'annotation-shape annotation-preview';
+            shape.style.backgroundColor = annotationColor + '44'; // More visible preview
+            shape.style.opacity = '0.8';
+            shape.style.pointerEvents = 'none';
+
+            const x = Math.min(annotationStartX, currentX) * 100;
+            const y = Math.min(annotationStartY, currentY) * 100;
+            const width = Math.abs(currentX - annotationStartX) * 100;
+            const height = Math.abs(currentY - annotationStartY) * 100;
+
+            shape.style.left = x + '%';
+            shape.style.top = y + '%';
+            shape.style.width = width + '%';
+            shape.style.height = height + '%';
+
+            canvas.appendChild(shape);
+        }
+
+        function finishDrawingAnnotation(e) {
+            if (!isDrawingAnnotation) return;
+            isDrawingAnnotation = false;
+
+            const canvas = e.currentTarget;
+            const rect = canvas.getBoundingClientRect();
+            const currentX = (e.clientX - rect.left) / rect.width;
+            const currentY = (e.clientY - rect.top) / rect.height;
+
+            // Remove preview
+            const preview = canvas.querySelector('.annotation-preview');
+            if (preview) preview.remove();
+
+            // Calculate annotation bounds
+            const x = Math.min(annotationStartX, currentX);
+            const y = Math.min(annotationStartY, currentY);
+            const width = Math.abs(currentX - annotationStartX);
+            const height = Math.abs(currentY - annotationStartY);
+
+            // Ignore very small annotations (accidental clicks)
+            if (width < 0.01 || height < 0.01) return;
+
+            // Create annotation data
+            const annotation = {
+                id: 'ann-' + Date.now() + '-' + (annotationIdCounter++),
+                type: 'rect',
+                x: x,
+                y: y,
+                width: width,
+                height: height,
+                color: annotationColor,
+                view: currentView, // Store which view this annotation was created on
+                device: currentDevice // Store which device this annotation was created on
+            };
+
+            // Check if adding to existing comment
+            if (pendingCommentForAnnotation) {
+                const comments = commentsData[currentPage] || [];
+                const comment = comments.find(c => c.id === pendingCommentForAnnotation);
+                if (comment) {
+                    if (!comment.annotations) comment.annotations = [];
+                    comment.annotations.push(annotation);
+                    renderAnnotations();
+                    loadCommentsForPage();
+                    updateCommentsBadge();
+                    updatePageListCommentIndicators();
+                }
+                pendingCommentForAnnotation = null;
+                // Remove drawing mode after adding annotation to existing comment
+                canvas.classList.remove('drawing');
+            } else {
+                // Prompt for new comment
+                if (!commentsPanel.classList.contains('open')) {
+                    openCommentsPanel();
+                }
+                commentInput.focus();
+                commentInput.setAttribute('data-pending-annotation', JSON.stringify(annotation));
+                commentInput.placeholder = 'Add a comment for this annotation...';
+            }
+        }
+
+        function renderAnnotations() {
+            const canvas = imageContainer.querySelector('.annotation-canvas');
+            const img = imageContainer.querySelector('img');
+            if (!canvas || !currentPage || !img) return;
+
+            // Make canvas match the image dimensions exactly for proper zoom scaling
+            const imgRect = img.getBoundingClientRect();
+            const wrapperRect = canvas.parentElement.getBoundingClientRect();
+
+            // Position canvas to overlay the image exactly
+            canvas.style.width = imgRect.width + 'px';
+            canvas.style.height = imgRect.height + 'px';
+            canvas.style.left = (imgRect.left - wrapperRect.left) + 'px';
+            canvas.style.top = (imgRect.top - wrapperRect.top) + 'px';
+
+            // Clear existing shapes (except preview)
+            canvas.querySelectorAll('.annotation-shape:not(.annotation-preview)').forEach(el => el.remove());
+
+            const comments = commentsData[currentPage] || [];
+            comments.forEach((comment, index) => {
+                if (!comment.annotations || comment.annotations.length === 0) return;
+
+                comment.annotations.forEach(ann => {
+                    // Only render annotations that match the current view and device
+                    if (ann.view && ann.view !== currentView) return;
+                    if (ann.device && ann.device !== currentDevice) return;
+
+                    const shape = document.createElement('div');
+                    shape.className = 'annotation-shape';
+                    shape.dataset.annotationId = ann.id;
+                    shape.dataset.commentId = comment.id;
+                    shape.style.borderColor = ann.color;
+                    shape.style.backgroundColor = ann.color + '33'; // Add transparency
+                    shape.style.left = (ann.x * 100) + '%';
+                    shape.style.top = (ann.y * 100) + '%';
+                    shape.style.width = (ann.width * 100) + '%';
+                    shape.style.height = (ann.height * 100) + '%';
+
+                    // Add number marker
+                    const number = document.createElement('div');
+                    number.className = 'annotation-number';
+                    number.textContent = index + 1;
+                    number.style.borderColor = ann.color;
+                    number.style.backgroundColor = ann.color;
+                    shape.appendChild(number);
+
+                    // Add delete button
+                    const deleteBtn = document.createElement('div');
+                    deleteBtn.className = 'annotation-delete';
+                    deleteBtn.innerHTML = 'X';
+                    deleteBtn.title = 'Delete annotation';
+                    deleteBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        deleteAnnotation(comment.id, ann.id);
+                    });
+                    shape.appendChild(deleteBtn);
+
+                    // Click to select
+                    shape.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        selectAnnotationShape(shape, comment.id);
+                    });
+
+                    canvas.appendChild(shape);
+                });
+            });
+        }
+
+        function selectAnnotationShape(shape, commentId) {
+            // Open comments panel if it's not already open
+            if (!commentsPanel.classList.contains('open')) {
+                openCommentsPanel();
+            }
+
+            // Deselect previous
+            imageContainer.querySelectorAll('.annotation-shape').forEach(s => s.classList.remove('selected'));
+
+            shape.classList.add('selected');
+            selectedAnnotation = {
+                shape: shape,
+                commentId: commentId,
+                annotationId: shape.dataset.annotationId
+            };
+
+            // Scroll to comment
+            const commentElements = commentsList.querySelectorAll('.comment-item');
+            commentElements.forEach(el => {
+                if (el.dataset.commentId === commentId) {
+                    el.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                    el.style.background = '#e3f2fd';
+                    setTimeout(() => {
+                        el.style.background = '';
+                    }, 2000);
+                }
+            });
+        }
+
+        function filterPages() {
+            const searchText = searchInput.value.toLowerCase().trim();
+            const pageItems = document.querySelectorAll('.page-item');
+            let visibleCount = 0;
+
+            if (searchText) {
+                searchClear.classList.add('visible');
+            } else {
+                searchClear.classList.remove('visible');
+            }
+
+            pageItems.forEach(item => {
+                const pageName = item.dataset.page.toLowerCase();
+                const page = item.dataset.page;
+                const hasComments = (commentsData[page] || []).length > 0;
+
+                // Check if page matches search text
+                const matchesSearch = pageName.includes(searchText);
+
+                // Check if page should be shown based on comments filter
+                const matchesFilter = !showOnlyPagesWithComments || hasComments;
+
+                if (matchesSearch && matchesFilter) {
+                    item.style.display = '';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            if (visibleCount === 0 && pageItems.length > 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
+
         function zoomImage(delta) {
             currentZoom = Math.max(0.5, Math.min(5, currentZoom + delta));
             applyZoom();
@@ -752,6 +2073,14 @@
                     img.classList.remove('zoomable');
                 }
             }
+
+            // Re-render annotations to match new zoom level
+            // Use requestAnimationFrame for better timing coordination with browser rendering
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    renderAnnotations();
+                });
+            });
         }
 
         function setupImageInteraction(img, wrapper) {
@@ -816,11 +2145,13 @@
             }
 
             loading.classList.add('active');
+            originalZipFile = file; // Store original file
 
             try {
                 const zip = await JSZip.loadAsync(file);
                 zipData = {};
                 metadataCache = {};
+                commentsData = {};
 
                 // Parse ZIP structure
                 for (const [path, zipEntry] of Object.entries(zip.files)) {
@@ -837,13 +2168,19 @@
 
                     // Handle metadata files separately
                     if (filename.endsWith('.json')) {
-                        const text = await zipEntry.async('text');
-                        const metadata = JSON.parse(text);
-                        const metadataKey = filename.startsWith('mobile_') ? 'mobile' : 'desktop';
-                        if (!metadataCache[folder]) {
-                            metadataCache[folder] = {};
+                        // Check if it's a comments file
+                        if (filename === 'comments.json') {
+                            const text = await zipEntry.async('text');
+                            commentsData[folder] = JSON.parse(text);
+                        } else {
+                            const text = await zipEntry.async('text');
+                            const metadata = JSON.parse(text);
+                            const metadataKey = filename.startsWith('mobile_') ? 'mobile' : 'desktop';
+                            if (!metadataCache[folder]) {
+                                metadataCache[folder] = {};
+                            }
+                            metadataCache[folder][metadataKey] = metadata;
                         }
-                        metadataCache[folder][metadataKey] = metadata;
                     } else if (filename.endsWith('.txt') || filename.endsWith('.html')) {
                         // Load text files (aria snapshots and DOM snapshots) as text
                         const text = await zipEntry.async('text');
@@ -859,6 +2196,8 @@
                 uploadArea.style.display = 'none';
                 viewerArea.classList.add('active');
                 sidebar.classList.add('active');
+                commentsToggle.classList.add('visible');
+                exportZipBtn.style.display = '';
             } catch (error) {
                 alert('Error loading ZIP file: ' + error.message);
             } finally {
@@ -874,16 +2213,19 @@
             pages.forEach(page => {
                 const li = document.createElement('li');
                 li.className = 'page-item';
+                li.dataset.page = page;
 
                 const files = Object.keys(zipData[page]);
                 const hasMobile = files.some(f => f.startsWith('mobile_'));
                 const hasDesktop = files.some(f => !f.startsWith('mobile_'));
+                const commentCount = (commentsData[page] || []).length;
 
                 li.innerHTML = `
-                    <div class="page-item-name">${page}</div>
+                    <div class="page-item-name" title="${page}">${page}</div>
                     <div class="page-item-count">
                         ${hasDesktop ? '<span class="badge">Desktop</span>' : ''}
                         ${hasMobile ? '<span class="badge mobile">Mobile</span>' : ''}
+                        ${commentCount > 0 ? `<span class="comment-indicator">${commentCount}</span>` : ''}
                     </div>
                 `;
 
@@ -899,9 +2241,36 @@
                     currentPage = pages[0];
                     pageTitle.textContent = pages[0];
                     updateButtonVisibility();
+                    updateCommentsBadge();
                     updateImage();
                 }
             }
+        }
+
+        function updatePageListCommentIndicators() {
+            const pageItems = document.querySelectorAll('.page-item');
+            pageItems.forEach(li => {
+                const page = li.dataset.page;
+                const commentCount = (commentsData[page] || []).length;
+                const countElement = li.querySelector('.page-item-count');
+
+                // Remove existing comment indicator
+                const existingIndicator = li.querySelector('.comment-indicator');
+                if (existingIndicator) {
+                    existingIndicator.remove();
+                }
+
+                // Add new indicator if there are comments
+                if (commentCount > 0 && countElement) {
+                    const indicator = document.createElement('span');
+                    indicator.className = 'comment-indicator';
+                    indicator.textContent = commentCount;
+                    countElement.appendChild(indicator);
+                }
+            });
+
+            // Re-apply filters after updating indicators
+            filterPages();
         }
 
         function selectPage(page) {
@@ -910,6 +2279,10 @@
             event.target.closest('.page-item').classList.add('active');
             pageTitle.textContent = page;
             updateButtonVisibility();
+            updateCommentsBadge();
+            if (commentsPanel.classList.contains('open')) {
+                loadCommentsForPage();
+            }
             updateImage();
         }
 
@@ -932,20 +2305,36 @@
             // Update button visibility and collect available views
             const viewButtons = document.querySelectorAll('[data-view]');
             const availableViews = [];
-            
+
             viewButtons.forEach(btn => {
                 const view = btn.dataset.view;
                 let isAvailable = false;
 
-                switch(view) {
-                    case 'aria-diff': isAvailable = hasAriaDiff; break;
-                    case 'dom-before': isAvailable = hasDomBefore; break;
-                    case 'dom-after': isAvailable = hasDomAfter; break;
-                    case 'compare': isAvailable = hasCompare; break;
-                    case 'before': isAvailable = hasBefore; break;
-                    case 'after': isAvailable = hasAfter; break;
-                    case 'diff': isAvailable = hasDiff; break;
-                    case 'diff-shifted': isAvailable = hasDiffShifted; break;
+                switch (view) {
+                    case 'aria-diff':
+                        isAvailable = hasAriaDiff;
+                        break;
+                    case 'dom-before':
+                        isAvailable = hasDomBefore;
+                        break;
+                    case 'dom-after':
+                        isAvailable = hasDomAfter;
+                        break;
+                    case 'compare':
+                        isAvailable = hasCompare;
+                        break;
+                    case 'before':
+                        isAvailable = hasBefore;
+                        break;
+                    case 'after':
+                        isAvailable = hasAfter;
+                        break;
+                    case 'diff':
+                        isAvailable = hasDiff;
+                        break;
+                    case 'diff-shifted':
+                        isAvailable = hasDiffShifted;
+                        break;
                 }
 
                 if (isAvailable) {
@@ -1137,7 +2526,10 @@
                     const viewer = document.createElement('div');
                     viewer.className = 'dom-viewer';
                     viewer.innerHTML = `
-                        <div class="dom-toolbar">DOM Snapshot (Before) - Rendered in sandboxed iframe</div>
+                        <div class="dom-toolbar">
+                            DOM Snapshot (Before) - Rendered in sandboxed iframe
+                            <button class="btn" onclick="openDomInNewTab('${prefix}before-dom.html')" style="margin-left: auto; padding: 4px 12px; font-size: 12px;">🔗 Open in new tab</button>
+                        </div>
                     `;
                     const iframe = document.createElement('iframe');
                     iframe.setAttribute('sandbox', 'allow-same-origin');
@@ -1169,7 +2561,10 @@
                     const viewer = document.createElement('div');
                     viewer.className = 'dom-viewer';
                     viewer.innerHTML = `
-                        <div class="dom-toolbar">DOM Snapshot (After) - Rendered in sandboxed iframe</div>
+                        <div class="dom-toolbar">
+                            DOM Snapshot (After) - Rendered in sandboxed iframe
+                            <button class="btn" onclick="openDomInNewTab('${prefix}after-dom.html')" style="margin-left: auto; padding: 4px 12px; font-size: 12px;">🔗 Open in new tab</button>
+                        </div>
                     `;
                     const iframe = document.createElement('iframe');
                     iframe.setAttribute('sandbox', 'allow-same-origin');
@@ -1245,21 +2640,30 @@
             }
 
             if (imageUrl) {
-                imageContainer.innerHTML = `
-                    <div class="image-wrapper">
-                        <img src="${imageUrl}" alt="${currentPage} - ${currentView}" />
-                    </div>
-                `;
+                const wrapper = document.createElement('div');
+                wrapper.className = 'image-wrapper';
+                wrapper.style.position = 'relative';
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = `${currentPage} - ${currentView}`;
+                wrapper.appendChild(img);
+                imageContainer.innerHTML = '';
+                imageContainer.appendChild(wrapper);
+
+                // Enable annotations for image views (not for aria/dom)
+                if (!['aria-diff', 'dom-before', 'dom-after'].includes(currentView)) {
+                    // Wait for image to load before creating canvas
+                    img.onload = () => {
+                        setupImageInteraction(img, wrapper);
+                        createAnnotationCanvas(wrapper);
+                    };
+                } else {
+                    img.onload = () => setupImageInteraction(img, wrapper);
+                }
+
                 zoomControls.style.display = 'flex';
                 currentZoom = 1;
                 zoomLevel.textContent = '100%';
-
-                // Setup interaction after image loads
-                const img = imageContainer.querySelector('img');
-                const wrapper = imageContainer.querySelector('.image-wrapper');
-                if (img && wrapper) {
-                    img.onload = () => setupImageInteraction(img, wrapper);
-                }
             } else {
                 imageContainer.innerHTML = `
                     <div class="no-selection">
@@ -1267,6 +2671,278 @@
                     </div>
                 `;
                 zoomControls.style.display = 'none';
+            }
+        }
+
+        function addComment() {
+            if (!currentPage) return;
+
+            const text = commentInput.value.trim();
+            if (!text) return;
+
+            // Check if username is set
+            if (!currentUsername) {
+                usernameModal.classList.add('active');
+                return;
+            }
+
+            // Initialize comments array for this page if needed
+            if (!commentsData[currentPage]) {
+                commentsData[currentPage] = [];
+            }
+
+            // Add comment
+            const comment = {
+                id: 'comment-' + Date.now(),
+                author: currentUsername,
+                text: text,
+                timestamp: new Date().toISOString(),
+                annotations: []
+            };
+
+            // Check for pending annotation
+            const pendingAnnotation = commentInput.getAttribute('data-pending-annotation');
+            if (pendingAnnotation) {
+                comment.annotations.push(JSON.parse(pendingAnnotation));
+                commentInput.removeAttribute('data-pending-annotation');
+                commentInput.placeholder = 'Write a comment...';
+            }
+
+            commentsData[currentPage].push(comment);
+            commentInput.value = '';
+            loadCommentsForPage();
+            updateCommentsBadge();
+            updatePageListCommentIndicators();
+            renderAnnotations();
+        }
+
+        window.deleteComment = function(commentId) {
+            if (!confirm('Are you sure you want to delete this comment and all its annotations?')) {
+                return;
+            }
+
+            const comments = commentsData[currentPage] || [];
+            const commentIndex = comments.findIndex(c => c.id === commentId);
+
+            if (commentIndex !== -1) {
+                comments.splice(commentIndex, 1);
+                if (comments.length === 0) {
+                    delete commentsData[currentPage];
+                } else {
+                    commentsData[currentPage] = comments;
+                }
+
+                loadCommentsForPage();
+                renderAnnotations();
+                updatePageListCommentIndicators();
+            }
+        }
+
+        window.deleteAnnotation = function(commentId, annotationId) {
+            if (!confirm('Are you sure you want to delete this annotation?')) {
+                return;
+            }
+
+            const comments = commentsData[currentPage] || [];
+            const comment = comments.find(c => c.id === commentId);
+
+            if (comment && comment.annotations) {
+                const annIndex = comment.annotations.findIndex(a => a.id === annotationId);
+                if (annIndex !== -1) {
+                    comment.annotations.splice(annIndex, 1);
+                    loadCommentsForPage();
+                    renderAnnotations();
+                    updatePageListCommentIndicators();
+                }
+            }
+        }
+
+        function loadCommentsForPage() {
+            if (!currentPage) return;
+
+            const comments = commentsData[currentPage] || [];
+
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<div class="no-comments">No comments yet. Be the first to comment!</div>';
+                return;
+            }
+
+            commentsList.innerHTML = comments.map((comment, index) => {
+                const date = new Date(comment.timestamp);
+                const timeStr = date.toLocaleString();
+                const hasAnnotations = comment.annotations && comment.annotations.length > 0;
+
+                // Create individual badges for each annotation
+                let annotationBadges = '';
+                if (hasAnnotations) {
+                    annotationBadges = comment.annotations.map((ann, annIndex) =>
+                        `<span class="comment-annotation-badge" onclick="highlightSingleAnnotation('${comment.id}', '${ann.id}')">${index + 1}</span>`
+                    ).join('');
+                }
+
+                return `
+                    <div class="comment-item ${hasAnnotations ? 'with-annotation' : ''}" 
+                         data-comment-id="${comment.id}"
+                         style="${hasAnnotations ? 'border-left-color: ' + comment.annotations[0].color : ''}">
+                        <div class="comment-header">
+                            <span class="comment-author">${escapeHtml(comment.author)}</span>
+                            <span class="comment-time">${timeStr}</span>
+                        </div>
+                        <div class="comment-text">${escapeHtml(comment.text)}</div>
+                        ${annotationBadges ? `<div class="comment-annotations">${annotationBadges}</div>` : ''}
+                        <div class="comment-actions">
+                            <button class="comment-action-btn" onclick="startAddingAnnotationToComment('${comment.id}')">➕ Add Annotation</button>
+                            <button class="comment-delete-btn" onclick="deleteComment('${comment.id}')" title="Delete comment">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Scroll to bottom
+            commentsList.scrollTop = commentsList.scrollHeight;
+        }
+
+        window.highlightSingleAnnotation = function(commentId, annotationId) {
+            // Find the annotation to get its view
+            const comments = commentsData[currentPage] || [];
+            let annotation = null;
+            for (const comment of comments) {
+                if (comment.id === commentId && comment.annotations) {
+                    annotation = comment.annotations.find(ann => ann.id === annotationId);
+                    if (annotation) break;
+                }
+            }
+
+            if (!annotation) return;
+
+            // Check if we need to switch view or device
+            const needsViewSwitch = annotation.view && annotation.view !== currentView;
+            const needsDeviceSwitch = annotation.device && annotation.device !== currentDevice;
+
+            if (needsViewSwitch || needsDeviceSwitch) {
+                // Switch to the annotation's view if different
+                if (needsViewSwitch) {
+                    currentView = annotation.view;
+                    document.querySelectorAll('[data-view]').forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.view === currentView);
+                    });
+                }
+
+                // Switch to the annotation's device if different
+                if (needsDeviceSwitch) {
+                    currentDevice = annotation.device;
+                    document.querySelectorAll('[data-device]').forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.device === currentDevice);
+                    });
+                    updateButtonVisibility();
+                }
+
+                // Update the image view
+                updateImage();
+                // Wait for the image to render before highlighting
+                setTimeout(() => {
+                    highlightAnnotationShape(annotationId);
+                }, 300);
+            } else {
+                highlightAnnotationShape(annotationId);
+            }
+        }
+
+        function highlightAnnotationShape(annotationId) {
+            const shape = imageContainer.querySelector(`.annotation-shape[data-annotation-id="${annotationId}"]`);
+            if (shape) {
+                shape.style.boxShadow = '0 0 20px rgba(33, 150, 243, 0.8)';
+                shape.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                setTimeout(() => {
+                    shape.style.boxShadow = '';
+                }, 2000);
+            }
+        }
+
+        window.startAddingAnnotationToComment = function(commentId) {
+            pendingCommentForAnnotation = commentId;
+            // Enable drawing mode
+            const canvas = imageContainer.querySelector('.annotation-canvas');
+            if (canvas) {
+                canvas.classList.add('drawing');
+            }
+            // Show a temporary message
+            const msg = document.createElement('div');
+            msg.style.cssText =
+                'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #2196f3; color: white; padding: 15px 30px; border-radius: 8px; z-index: 10000; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);';
+            msg.textContent = '🖱️ Draw a rectangle on the image to add annotation';
+            document.body.appendChild(msg);
+            setTimeout(() => msg.remove(), 2000);
+        }
+
+        window.openDomInNewTab = function(domFile) {
+            if (!currentPage) return;
+            
+            const domHtml = zipData[currentPage][domFile];
+            if (!domHtml) return;
+            
+            // Create a blob from the HTML content
+            const blob = new Blob([domHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            // Open in new tab
+            window.open(url, '_blank');
+            
+            // Clean up the URL after a short delay
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
+        function updateCommentsBadge() {
+            if (!currentPage) return;
+
+            const count = (commentsData[currentPage] || []).length;
+            if (count > 0) {
+                commentsBadge.textContent = count;
+                commentsBadge.style.display = 'flex';
+            } else {
+                commentsBadge.style.display = 'none';
+            }
+        }
+
+        async function exportZipWithComments() {
+            if (!originalZipFile) return;
+
+            loading.classList.add('active');
+
+            try {
+                // Load original ZIP
+                const zip = await JSZip.loadAsync(originalZipFile);
+
+                // Add comments.json files for pages with comments
+                for (const [page, comments] of Object.entries(commentsData)) {
+                    if (comments && comments.length > 0) {
+                        const commentsJson = JSON.stringify(comments, null, 2);
+                        zip.file(`${page}/comments.json`, commentsJson);
+                    }
+                }
+
+                // Generate new ZIP
+                const blob = await zip.generateAsync({
+                    type: 'blob'
+                });
+
+                // Download
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                const originalName = originalZipFile.name.replace('.zip', '');
+                a.download = `${originalName}-with-comments.zip`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                alert('Error exporting ZIP: ' + error.message);
+            } finally {
+                loading.classList.remove('active');
             }
         }
     </script>
